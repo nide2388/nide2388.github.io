@@ -1,0 +1,123 @@
+html {
+	overflow-y : scroll;
+	font-family: Consolas, Microsoft JhengHei;
+}
+
+table {
+	margin-left : auto;
+	margin-right: auto;
+}
+
+#地區選擇,
+#表格 {
+	vertical-align: top;
+	font-size     : 15px;
+	letter-spacing: 0.5px;
+}
+
+#地區選擇 {
+	width: 300px;
+}
+
+#編輯選擇區 {
+	font-size  : 25px;
+	font-weight: bold;
+	color      : #ff8000;
+}
+
+select {
+	width      : 170px;
+	font-size  : 15px;
+	font-family: Consolas, Microsoft JhengHei;
+}
+
+input[type=text] {
+	width      : 162px;
+	font-size  : 15px;
+	font-family: Consolas, Microsoft JhengHei;
+}
+
+.說明 p {
+	margin-block-start: 10px;
+	margin-block-end  : 10px;
+}
+
+.說明 p:first-child {
+	margin-block-start: 0px;
+}
+
+.說明 p:last-child {
+	margin-block-end: 0px;
+}
+
+.結尾線 {
+	margin-block-end: 20px;
+}
+
+.錯誤 {
+	font-weight: bold;
+	color      : #f00;
+}
+
+#地區選擇 .綠色 {
+	background-color: #134f5c;
+	border          : 1px solid #333;
+	color           : #fff;
+	white-space     : nowrap;
+}
+
+#地區選擇 .副標題 {
+	font-size  : 25px;
+	font-weight: bold;
+	color      : #134f5c;
+}
+
+#表格 table {
+	text-align    : center;
+	margin-left   : auto;
+	margin-right  : auto;
+	border-spacing: 0px;
+	border        : 1px solid #333;
+}
+
+#表格 table th,
+#表格 table td {
+	font-size  : 15px;
+	border     : 1px solid #333;
+	padding    : 1px;
+	white-space: nowrap;
+}
+
+#表格 table th {
+	background-color: #134f5c;
+	color           : #fff;
+	width: 700px;
+}
+
+#表格 table th button {
+	width: 30px;
+	color: #134f5c;
+}
+
+#表格 table tr:nth-child(odd) td {
+	background-color: #fff;
+}
+
+#表格 table tr:nth-child(even) td {
+	background-color: hsl(240, 100%, 95%);
+}
+
+#表格 table tr:hover td {
+	background-color: hsl(120, 100%, 85%);
+}
+
+#表格 table td {
+	color: #222;
+}
+
+#表格 table td div {
+	padding      : 0px;
+	overflow     : hidden;
+	white-space  : nowrap;
+	text-overflow: ellipsis;
+}
