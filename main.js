@@ -1,7 +1,7 @@
 /*google試算表轉出的Json API連結，自訂指令loadfile*/
 let url = 'https://script.google.com/macros/s/AKfycbw95PeR5Kp05FW7_7X_pvAzuszYplfoW1iAmP4dNEszCbPURFmjUUophmbWSMHgOqV3/exec';
 let loadfile = (type, url) => fetch(url).then(r => r[type]());
-/*讀取data，後面await loadfile才會用到，設定全域，避免重複loadfile*/
+/*data，後面await loadfile才會用到，設定全域，避免重複loadfile*/
 let data; 
 
 /*async搭配await，下拉選單的獨立函式，會在讀取前就先預先造成null錯誤*/
