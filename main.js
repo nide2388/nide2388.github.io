@@ -1,61 +1,64 @@
 /*google試算表轉出的Json API連結，自訂指令loadfile*/
 let url = 'https://script.google.com/macros/s/AKfycbw95PeR5Kp05FW7_7X_pvAzuszYplfoW1iAmP4dNEszCbPURFmjUUophmbWSMHgOqV3/exec';
 let loadfile = (type, url) => fetch(url).then(r => r[type]());
-/*data，後面await loadfile才會用到，設定全域，避免重複loadfile*/
-let data; 
 
-/*async搭配await，下拉選單的獨立函式，會在讀取前就先預先造成null錯誤*/
 async function load() {
-  data = await loadfile('json', url);
+  /*await表示會暫停async函式執行，避免在讀取完成前就先預先執行造成null錯誤*/
+  let data = await loadfile('json', url);
+  /*data[分頁第N頁]['分頁名'][第N行][第N欄]*/
+  
+  /*建立縣市下拉選項，分頁名就是縣市名*/
   let select1 = document.getElementById("縣市");
-  /*依照分頁數建立縣市下拉選項，分頁名就是縣市名*/
   for (let i = 0; i < data.length; i++) {
-      let option = document.createElement("option");
-      option.text = Object.keys(data[i]);
-      select1.add(option);
+    /*如果let option放在for迴圈之上，會造成只有同一個option只是一直被修改內容*/
+    let option = document.createElement("option");  
+    option.text = Object.keys(data[i]);
+    select1.add(option);
   }
+  
+  /*縣市選單變換時觸發鄉鎮下拉選項更新*/
   let select2 = document.getElementById("鄉鎮");
-  /*下拉選單更新時觸發，測試之後可以放在load()內而不用獨立*/
   select1.addEventListener("change", async function() {
     /*修正鄉鎮選單沒建立時，執行清空會造成錯誤*/
-    if (!select2) {
-      return;
-      }
+    if (!select2) return;
     select2.innerHTML = "";
-    /*selectedIndex出來是一個數字，0：臺灣、1：新北市....*/
+  
+    /*selectedIndex出來是一個數字，雖然[分頁第N頁]和['分頁名']是一對一
+    但還是要輸入data[1]['台北市']，才能列出台北市底下的鄉鎮，所以才要取得cityName字串*/
     let cityName = select1.options[select1.selectedIndex].text;
-    /*data[1]['新北市']，才能列出新北市的鄉鎮，所以才要取得selected的字串*/
-    //let sheetName =  data[select1.selectedIndex][cityName];
-    let sheetName =  data.find(item => Object.keys(item)[0] === cityName)[cityName];
+    //let sheetName =  data.find(item => Object.keys(item)[0] === cityName)[cityName];
+    let sheetName =  data[select1.selectedIndex][cityName];
+    
     /*鄉鎮下拉選項*/
     for (let i = 0; i < sheetName.length; i++) {
-    let option = document.createElement("option");
-    if(i==0) option.text = '全部';
-    else option.text = sheetName[i][0];
-    select2.add(option);
+      let option = document.createElement("option");
+      if(i==0) option.text = '全部';
+      else option.text = sheetName[i][0];
+      select2.add(option);
     }
 
-    /*/////////左側下拉選單↑/////////資料表格呈現↓//////////*/
+    /******↑左側下拉選單↑*****↓資料表格呈現↓******/
 
-    /*資料表頭*/
+    /*資料表頭，同鄉鎮選項會清空、更新->縣市>功能測試表*/
     let tableHeader = document.getElementById("表頭");
     tableHeader.innerHTML = "";
-
+    
+    /*沿用sheetName->選定好的select2(分頁)內的鄉鎮資料，[0]就是首行的表頭*/
     let firstRow = sheetName[0];
     let headerRow = document.createElement("tr");
     
+    /*增加表頭欄位*/
     for (let i = 0; i < firstRow.length; i++) {
       let headerCell = document.createElement("th");
       headerCell.textContent = firstRow[i];
-      let buttonCell = document.createElement("button");
+      /*除了區域別,其他都加上按鈕,按鈕屬性各自是b1(戶數),b2(人數),b3...*/
       if(i!=0){
+        let buttonCell = document.createElement("button");
         buttonCell.id= 'b'+i;
         buttonCell.textContent = '▲';
         headerCell.appendChild(buttonCell);
       }
       headerRow.appendChild(headerCell);
-
-
     }
     tableHeader.appendChild(headerRow);
 
@@ -70,11 +73,12 @@ async function load() {
       order = !order;
       });
     });
+
     /*資料表內容*/
     let tableBody=document.getElementById("內容");
     tableBody.innerHTML = "";
     
-    
+    /*沿用sheetName->選定好的select2(分頁)內的鄉鎮資料，[1]第二行開始是鄉鎮內容*/
     for(let i=1; i < sheetName.length; i++) {
       let contentTable = sheetName[i];
       let contentRow = document.createElement("tr");
@@ -111,10 +115,9 @@ select2.addEventListener("change", async function() {
 
 
 
-/*初始刷新選單*/
+/*刷新鄉鎮初始空白選單*/
 select1.dispatchEvent(new Event('change'));
 }load();
-
 
 
 
